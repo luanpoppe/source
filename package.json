@@ -27,14 +27,14 @@
     "@angular-devkit/build-angular": "^14.2.1",
     "@angular/cli": "~14.2.1",
     "@angular/compiler-cli": "^14.0.0",
-    "@testing-library/angular": "^15.1.0",
-    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/angular": "^12.3.0",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jasmine": "~4.0.0",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "jasmine-core": "~4.3.0",
     "jest": "^29.7.0",
-    "jest-preset-angular": "^14.0.0",
+    "jest-preset-angular": "^13.1.6",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.2.0",
@@ -45,13 +45,18 @@
   "jest": {
     "preset": "jest-preset-angular",
     "setupFilesAfterEnv": [
-      "<rootDir>/setup-jest.ts"
+      "./setup-jest.ts"
     ],
     "transform": {
-      "^.+||.(ts|js|html)$": "jest-preset-angular"
+      "^.+\\.(ts|js|html)$": "jest-preset-angular"
+    },
+    "globals": {
+      "ts-jest": {
+        "stringifyContentPathRegex": "\\.(html)$"
+      }
     },
     "testMatch": [
-      "**/?(*.)+(jest).ts"
+      "**/?(*.)+(jest).[jt]s?(x)"
     ],
     "testEnvironment": "jsdom"
   }
