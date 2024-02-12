@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { SignUpComponent } from './sign-up.component';
+import UserEvent from '@testing-library/user-event';
 
 describe('SignUpComponent', () => {
   describe('Layout', () => {
@@ -46,6 +47,20 @@ describe('SignUpComponent', () => {
       await render(SignUpComponent);
       const button = screen.getByRole('button', { name: 'Sign Up' });
       expect(button).toBeDisabled();
+    });
+  });
+
+  describe('Interactions', () => {
+    it('enables the button when the password and password repeat fields have the same value', async () => {
+      await render(SignUpComponent);
+      const password = screen.getByLabelText('Password');
+      const passwordRepeat = screen.getByLabelText('Password Repeat');
+      await UserEvent.type(password, 'P4ssword');
+      await UserEvent.type(passwordRepeat, 'P4ssword');
+      const button = screen.getByRole('button', { name: 'Sign Up' });
+      await waitFor(() => {
+        expect(button).toBeEnabled();
+      });
     });
   });
 });
