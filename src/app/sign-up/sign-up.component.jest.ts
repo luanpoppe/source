@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { SignUpComponent } from './sign-up.component';
 import UserEvent from '@testing-library/user-event';
+import 'whatwg-fetch';
 
 describe('SignUpComponent', () => {
   describe('Layout', () => {
@@ -25,7 +26,6 @@ describe('SignUpComponent', () => {
     it('has password type for password input', async () => {
       await render(SignUpComponent);
       const input = screen.getByLabelText('Password');
-      console.log('input', input);
       expect(input).toHaveAttribute('type', 'password');
     });
     it('has password repeat input', async () => {
@@ -61,6 +61,39 @@ describe('SignUpComponent', () => {
       await waitFor(() => {
         expect(button).toBeEnabled();
       });
+    });
+
+    it('sends username, email and password to backend after clicking the button', async () => {
+      const spy = jest.spyOn(window, 'fetch');
+      console.log('spy', spy);
+
+      await render(SignUpComponent);
+      const username = screen.getByLabelText('Username');
+      const email = screen.getByLabelText('E-mail');
+      const password = screen.getByLabelText('Password');
+      const passwordRepeat = screen.getByLabelText('Password Repeat');
+      await UserEvent.type(username, 'user1');
+      await UserEvent.type(email, 'user1@mail.com');
+      await UserEvent.type(password, 'P4ssword');
+      await UserEvent.type(passwordRepeat, 'P4ssword');
+      const button = screen.getByRole('button', {
+        name: 'Sign Up',
+      }) as HTMLButtonElement;
+      await waitFor(() => {
+        expect(button).toBeEnabled();
+      });
+      await UserEvent.click(button);
+
+      const args: any = spy.mock.calls[0];
+      const secondParam = args[1] as RequestInit;
+      expect(secondParam).toBeDefined();
+      expect(secondParam.body).toEqual(
+        JSON.stringify({
+          username: 'user1',
+          password: 'P4ssword',
+          email: 'user1@mail.com',
+        })
+      );
     });
   });
 });
