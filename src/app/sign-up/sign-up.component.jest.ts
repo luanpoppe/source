@@ -65,7 +65,6 @@ describe('SignUpComponent', () => {
 
     it('sends username, email and password to backend after clicking the button', async () => {
       const spy = jest.spyOn(window, 'fetch');
-      console.log('spy', spy);
 
       await render(SignUpComponent);
       const username = screen.getByLabelText('Username');
@@ -86,7 +85,6 @@ describe('SignUpComponent', () => {
 
       const args: any = spy.mock.calls[0];
       const secondParam = args[1] as RequestInit;
-      expect(secondParam).toBeDefined();
       expect(secondParam.body).toEqual(
         JSON.stringify({
           username: 'user1',
